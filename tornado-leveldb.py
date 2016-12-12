@@ -65,8 +65,10 @@ class IterHandler(BaseHandler):
         key_to = self.get_argument("to", None)
         key = (key_from, key_to)
         if key not in self.iterators_cache:
-            key_from = key_from.encode()
-            key_to = key_to.encode()
+            if isinstance(key_from, str):
+                key_from = key_from.encode()
+            if isinstance(key_to, str):
+                key_to = key_to.encode()
             self.iterators_cache[key] = self.ldb.RangeIter(key_from, key_to)
         it = self.iterators_cache[key]
         try:
