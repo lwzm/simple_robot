@@ -21,7 +21,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def set_default_headers(self):
         #self.set_header("Content-Type", "application/octet-stream")
-        self.set_header("Content-Type", "text/plain")
+        self.set_header("Content-Type", "text/plain; charset=UTF-8")
 
 
 class DataHandler(BaseHandler):
