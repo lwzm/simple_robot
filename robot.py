@@ -17,7 +17,6 @@ import time
 import urllib.parse
 
 import bs4
-import redis
 import requests
 
 # https://urllib3.readthedocs.io/en/latest/advanced-usage.html#ssl-warnings
@@ -116,6 +115,18 @@ def do_it(task):
                 images.add(src)
 
     page["images"] = images
+
+    hosts_found = set()
+    for a in soup.find_all("a"):
+        href = a.get("href")
+        if href:
+            href = href.strip()
+            host = urllib.parse.urlparse(href).netloc
+            if host:
+                hosts_found.add(host)
+
+    page["hosts_found"] = list(hosts_found)
+
     return page
 
 

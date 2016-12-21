@@ -38,6 +38,11 @@ class DataHandler(BaseHandler):
         key = key.encode()
         value = self.request.body
         self.ldb.Put(key, value)
+        info = json.loads(value.decode())
+        hosts_found = info.get("hosts_found")
+        if hosts_found:
+            self.redis_cli.sadd("hosts_found", *hosts_found)
+
 
     def delete(self, key):
         self.ldb.Delete(key.encode())
