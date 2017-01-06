@@ -25,6 +25,14 @@ class BaseHandler(tornado.web.RequestHandler):
 
 
 class DataHandler(BaseHandler):
+    def head(self, key):
+        key = key.encode()
+        it = self.ldb.RangeIter(key, key, include_value=False, fill_cache=False)
+        try:
+            next(it)
+        except StopIteration:
+            raise tornado.web.HTTPError(404)
+
     def get(self, key):
         key = key.encode()
         try:
