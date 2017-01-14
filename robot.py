@@ -16,6 +16,7 @@ import sys
 import time
 import urllib.parse
 
+import arrow
 import bs4
 import requests
 
@@ -126,6 +127,7 @@ def do_it(task):
                 hosts_found.add(host)
 
     page["hosts_found"] = list(hosts_found)
+    page["timestamp"] = str(arrow.now())
 
     return page
 
@@ -141,7 +143,8 @@ def child_do(task):
 
     url_fmt = (upstream + "/data/{}").format
     session.put(url_fmt(task), data=data)
-    if info["netloc"] != task:
+    netloc = info["netloc"]
+    if netloc != task and not netloc.startswith("www."):
         session.put(url_fmt(info["netloc"]), data=data)
 
     sys.exit()
