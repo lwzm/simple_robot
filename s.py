@@ -87,7 +87,7 @@ class IterHandler(BaseHandler):
         try:
             k, v = next(it)
         except StopIteration:
-            del self.iterators_cache[key]
+            #del self.iterators_cache[key]
             raise tornado.web.HTTPError(404)
         self.write(bytes(k))
         self.write(b'\n')
@@ -96,7 +96,11 @@ class IterHandler(BaseHandler):
     def delete(self):
         key_from = self.get_argument("from", None)
         key_to = self.get_argument("to", None)
-        del self.iterators_cache[(key_from, key_to)]
+        key = (key_from, key_to)
+        if key in self.iterators_cache:
+            del self.iterators_cache[key]
+        else:
+            raise tornado.web.HTTPError(404)
 
 
 class MainHandler(BaseHandler):
