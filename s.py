@@ -66,8 +66,8 @@ class QueueHandler(BaseHandler):
             yield tornado.gen.sleep(1)
 
     def post(self):
-        task = self.request.body
-        self.redis_cli.lpush("queue", task)
+        tasks = self.request.body.split()
+        self.redis_cli.lpush("queue", *tasks)
 
 
 class IterHandler(BaseHandler):
